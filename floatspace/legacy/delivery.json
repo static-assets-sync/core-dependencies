@@ -1,0 +1,58 @@
+{
+  "version": "2026-03-05",
+  "lastUpdated": "2026-03-05T17:45:00Z",
+  "lastUpdatedBy": "manual",
+  "description": "FloatSpace Warehouse URL Configuration. Only this file is modified during failover.",
+  
+  "warehouses": [
+    {
+      "name": "Recovered Gmail (Front Line)",
+      "email": "math.unility.tool@gmail.com",
+      "status": "active",
+      "active": true,
+      "url": "https://script.google.com/macros/d/[RECOVERED_SCRIPT_ID]/usercopy",
+      "deployedAt": "2026-03-05T00:00:00Z",
+      "notes": "Primary warehouse. Google Apps Script on Recovered Gmail account.",
+      "healthCheck": true
+    },
+    {
+      "name": "Aged Backup Gmail (Failover 1)",
+      "email": "[AGED_BACKUP_EMAIL]",
+      "status": "standby",
+      "active": false,
+      "url": "https://script.google.com/macros/d/[AGED_BACKUP_SCRIPT_ID]/usercopy",
+      "deployedAt": "2026-03-05T00:00:00Z",
+      "notes": "Cold standby. Apps Script deployed but URL not used unless Front Line fails.",
+      "healthCheck": false
+    },
+    {
+      "name": "Workspace Account (Failover 2)",
+      "email": "[WORKSPACE_EMAIL]",
+      "status": "standby",
+      "active": false,
+      "url": "https://script.google.com/macros/d/[WORKSPACE_SCRIPT_ID]/usercopy",
+      "deployedAt": "2026-03-05T00:00:00Z",
+      "notes": "Emergency fallback. Google Workspace account for redundancy.",
+      "healthCheck": false
+    }
+  ],
+
+  "failoverRules": {
+    "healthCheckIntervalSeconds": 60,
+    "timeoutMs": 5000,
+    "failureThreshold": 3,
+    "retryBackoffMs": [1000, 5000, 15000],
+    "description": "OpenClaw monitors active URL every 60s. After 3 failures, swap to next standby."
+  },
+
+  "history": [
+    {
+      "timestamp": "2026-03-05T17:45:00Z",
+      "action": "init",
+      "from": "unknown",
+      "to": "Recovered Gmail",
+      "reason": "Initial deployment",
+      "initiatedBy": "manual"
+    }
+  ]
+}

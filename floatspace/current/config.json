@@ -1,0 +1,50 @@
+{
+  "app": {
+    "name": "FloatSpace",
+    "version": "1.0.0",
+    "description": "Collaborative study & messaging platform"
+  },
+  "backend": {
+    "type": "google-apps-script",
+    "warehouses": [
+      {
+        "id": 1,
+        "name": "Primary (Recovered)",
+        "url": "https://script.google.com/macros/d/[RECOVERED_SCRIPT_ID]/usercopy",
+        "active": true,
+        "notes": "Primary warehouse. Google Apps Script on recovered Gmail account."
+      },
+      {
+        "id": 2,
+        "name": "Backup (Aged)",
+        "url": "https://script.google.com/macros/d/[AGED_BACKUP_SCRIPT_ID]/usercopy",
+        "active": false,
+        "notes": "Aged backup for redundancy."
+      },
+      {
+        "id": 3,
+        "name": "Emergency (Workspace)",
+        "url": "https://script.google.com/macros/d/[WORKSPACE_SCRIPT_ID]/usercopy",
+        "active": false,
+        "notes": "Emergency fallback. Google Workspace account for redundancy."
+      }
+    ]
+  },
+  "features": {
+    "studyRooms": true,
+    "directMessages": true,
+    "calculator": true,
+    "autoDelete": true,
+    "discovery": true,
+    "panicButton": true
+  },
+  "freemium": {
+    "free_contacts": 10,
+    "unlimited_contacts_tier": "pro"
+  },
+  "oauth": {
+    "provider": "google",
+    "gmail": "6d7.6d7@gmail.com",
+    "scopes": ["email", "profile", "https://www.googleapis.com/auth/spreadsheets"]
+  }
+}

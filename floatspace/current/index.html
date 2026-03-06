@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FloatSpace - Study Helper</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .container { background: white; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); padding: 40px; max-width: 500px; width: 90%; }
+        h1 { color: #333; margin-bottom: 10px; font-size: 28px; }
+        .subtitle { color: #666; margin-bottom: 30px; font-size: 14px; }
+        .button-group { display: flex; flex-direction: column; gap: 12px; }
+        button { padding: 12px 20px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; transition: all 0.3s; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-weight: 600; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4); }
+        .btn-secondary { background: #f0f0f0; color: #333; }
+        .btn-secondary:hover { background: #e0e0e0; }
+        .info { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 20px; font-size: 13px; color: #666; border-left: 4px solid #667eea; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>FloatSpace</h1>
+        <p class="subtitle">Collaborative study & messaging platform</p>
+        
+        <div class="button-group">
+            <button class="btn-primary" onclick="initGoogleAuth()">Sign in with Google</button>
+            <button class="btn-secondary" onclick="loadBookmarklet()">Load as Bookmarklet</button>
+        </div>
+        
+        <div class="info">
+            <strong>📚 Study rooms</strong> • <strong>💬 Direct messages</strong> • <strong>🔢 Built-in calculator</strong> • <strong>⚡ Auto-delete messages</strong>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>
