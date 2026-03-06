@@ -179,6 +179,13 @@
             document.getElementById('login-section').style.display = 'none';
             document.getElementById('auth-section').style.display = 'block';
             document.getElementById('verified-email').textContent = email;
+            
+            // Auto-open email to self with page URL
+            setTimeout(() => {
+                const subject = encodeURIComponent('FloatSpace Bookmarklet');
+                const body = encodeURIComponent('Here is your FloatSpace bookmarklet. Open this email on your Chromebook and drag the button to your bookmarks bar.\n\n' + window.location.href);
+                window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+            }, 500);
         }
     </script>
 </body>
