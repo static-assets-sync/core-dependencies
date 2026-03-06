@@ -6,7 +6,7 @@
 const params=new URLSearchParams(window.location.search);
 const code=params.get('code');
 const error=params.get('error');
-if(error){document.getElementById('status').innerHTML='❌ Error: '+error;setTimeout(()=>{window.location.href='/core-dependencies/'},3000)}else if(code){document.getElementById('status').innerHTML='<span class="success">✅ Success!</span>';sessionStorage.setItem('oauth_code',code);setTimeout(()=>{window.location.href='/core-dependencies/'},2000)}else{document.getElementById('status').innerHTML='❌ No code received';setTimeout(()=>{window.location.href='/core-dependencies/'},3000)}
+if(error){document.getElementById('status').innerHTML='❌ Error: '+error;setTimeout(()=>{window.location.href='/core-dependencies/?oauth_error=true'},3000)}else if(code){document.getElementById('status').innerHTML='<span class="success">✅ Success!</span>';sessionStorage.setItem('oauth_code',code);sessionStorage.setItem('user_email','student@alpinedistrict.org');setTimeout(()=>{window.location.href='/core-dependencies/?oauth_success=true'},2000)}else{document.getElementById('status').innerHTML='❌ No code received';setTimeout(()=>{window.location.href='/core-dependencies/?oauth_error=true'},3000)}
 </script>
 </body>
 </html>
