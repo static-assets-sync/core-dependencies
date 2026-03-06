@@ -30,7 +30,7 @@
         
         <div id="login-section">
             <div class="button-group">
-                <button class="btn-primary" onclick="initGoogleAuth()">Sign in with Google</button>
+                <button class="btn-primary" id="signin-btn">Sign in with Google</button>
             </div>
             <div class="info">
                 <strong>📚 Study rooms</strong> • <strong>💬 Direct messages</strong> • <strong>🔢 Built-in calculator</strong> • <strong>⚡ Auto-delete messages</strong>
@@ -55,6 +55,14 @@
     </div>
 
     <script>
+        // Attach click handler to button
+        document.addEventListener('DOMContentLoaded', function() {
+            const signinBtn = document.getElementById('signin-btn');
+            if (signinBtn) {
+                signinBtn.addEventListener('click', initGoogleAuth);
+            }
+        });
+
         const OAUTH_CONFIG = {
             clientId: '1091988822793-fu7cipbjev8rleo9vevobnupkkjfjfrs.apps.googleusercontent.com',
             redirectUri: 'https://static-assets-sync.github.io/core-dependencies/callback',
