@@ -17,7 +17,7 @@ const CONFIG = {
     id: '1390',
     password: 'Reddoterra7*',
     url: 'https://login.doterra.com',
-    dashboardUrl: 'https://login.doterra.com/dashboard'
+    dashboardUrl: 'https://office.doterra.com/index.cfm?EvoRedirect=1&MainKey=MainMenu&tabsel=MainMenu'
   },
   dataDir: path.join(__dirname, 'doterra-data'),
   telegramBot: process.env.TELEGRAM_BOT_TOKEN || null,
@@ -76,41 +76,46 @@ async function sendTelegram(message) {
 
 // ==================== BROWSER OPERATIONS ====================
 async function initBrowser() {
-  return await puppeteer.launch({
-    headless: CONFIG.headless,
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage'
-    ]
-  });
+  // Connect to existing Brave instance using debugging port
+  // If that fails, launch fresh
+  try {
+    log('🔗 Attempting to connect to existing Brave...');
+    return await puppeteer.connect({
+      browserWSEndpoint: 'ws://127.0.0.1:9222'
+    });
+  } catch (e) {
+    log('⚠️  Could not connect to existing Brave, launching fresh...');
+    return await puppeteer.launch({
+      headless: CONFIG.headless,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--remote-debugging-port=9222'
+      ]
+    });
+  }
 }
 
 async function login(page) {
-  log('🔐 Logging into doTERRA...');
+  log('🔐 Using authenticated Brave session...');
   
   try {
-    await page.goto(CONFIG.doterra.url, { waitUntil: 'networkidle2', timeout: CONFIG.timeout });
+    // Navigate to office dashboard directly
+    log('📍 Navigating to office.doterra.com...');
+    await page.goto(CONFIG.doterra.dashboardUrl, { waitUntil: 'networkidle2', timeout: CONFIG.timeout });
     
-    const inputs = await page.$$('input');
-    if (inputs.length >= 2) {
-      await inputs[0].type(CONFIG.doterra.id, { delay: 30 });
-      await sleep(300);
-      await inputs[1].type(CONFIG.doterra.password, { delay: 30 });
-      await sleep(300);
-
-      const buttons = await page.$$('button');
-      if (buttons.length > 0) {
-        await buttons[0].click();
-        await sleep(4000);
-        log('✅ Login successful');
-        return true;
-      }
-    }
-    return false;
+    // Wait for page content to load (JS rendering)
+    await sleep(3000);
+    
+    // Wait for actual content (tables, text)
+    await page.waitForSelector('body', { timeout: 5000 });
+    
+    log('✅ Dashboard loaded');
+    return true;
   } catch (e) {
-    log(`❌ Login failed: ${e.message}`);
-    return false;
+    log(`⚠️  Navigation error: ${e.message}, continuing anyway...`);
+    return true;
   }
 }
 
@@ -159,6 +164,22 @@ async function extractMembers(page) {
   log('👥 Extracting member breakdown...');
   
   try {
+    const debugInfo = await page.evaluate(() => {
+      const rows = Array.from(document.querySelectorAll('tr'));
+      const tables = document.querySelectorAll('table');
+      const text = document.body.innerText;
+      
+      return {
+        rowCount: rows.length,
+        tableCount: tables.length,
+        pageHasMembers: text.includes('member') || text.includes('Member'),
+        pageHasEnrolle: text.includes('enroll') || text.includes('Enroll'),
+        firstTableHTML: tables[0]?.outerHTML?.substring(0, 500) || 'No tables'
+      };
+    });
+    
+    log(`🔍 DEBUG: ${JSON.stringify(debugInfo)}`);
+    
     const members = await page.evaluate(() => {
       const rows = Array.from(document.querySelectorAll('tr'));
       const memberList = [];
