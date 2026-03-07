@@ -213,9 +213,16 @@
             }
         }
         
-        // Load data on page load and refresh every 5 minutes
+        // Load data on page load
         loadData();
-        setInterval(loadData, 300000);
+        
+        // Refresh schedule:
+        // - Normal days: every 30 minutes (data updates at 6 AM only)
+        // - Last 2 days of month: every 30 minutes (data updates at 6 AM, 11 AM, 4 PM, 9 PM)
+        const now = new Date();
+        const day = now.getDate();
+        const refreshInterval = (day >= 30) ? 300000 : 1800000; // 5 min (last 2 days), 30 min (other days)
+        setInterval(loadData, refreshInterval);
     </script>
 </body>
 </html>

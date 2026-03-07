@@ -12,12 +12,67 @@
     </array>
     
     <key>StartCalendarInterval</key>
-    <dict>
-        <key>Hour</key>
-        <integer>6</integer>
-        <key>Minute</key>
-        <integer>0</integer>
-    </dict>
+    <array>
+        <!-- Daily at 6 AM (all days) -->
+        <dict>
+            <key>Hour</key>
+            <integer>6</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+        </dict>
+        <!-- Last 2 days of month: every 5 hours -->
+        <!-- 11 AM on 30th & 31st -->
+        <dict>
+            <key>Hour</key>
+            <integer>11</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+            <key>Day</key>
+            <integer>30</integer>
+        </dict>
+        <dict>
+            <key>Hour</key>
+            <integer>11</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+            <key>Day</key>
+            <integer>31</integer>
+        </dict>
+        <!-- 4 PM on 30th & 31st -->
+        <dict>
+            <key>Hour</key>
+            <integer>16</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+            <key>Day</key>
+            <integer>30</integer>
+        </dict>
+        <dict>
+            <key>Hour</key>
+            <integer>16</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+            <key>Day</key>
+            <integer>31</integer>
+        </dict>
+        <!-- 9 PM on 30th & 31st -->
+        <dict>
+            <key>Hour</key>
+            <integer>21</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+            <key>Day</key>
+            <integer>30</integer>
+        </dict>
+        <dict>
+            <key>Hour</key>
+            <integer>21</integer>
+            <key>Minute</key>
+            <integer>0</integer>
+            <key>Day</key>
+            <integer>31</integer>
+        </dict>
+    </array>
     
     <key>StandardOutPath</key>
     <string>/Users/mac/.openclaw/workspace/doterra-cron.log</string>
