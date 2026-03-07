@@ -1,0 +1,209 @@
+// ~/.openclaw/openclaw.json - MODEL CONFIGURATION
+// Problem-driven 7-model lineup for 24GB Mac
+
+{
+  // ============ MODEL PROVIDERS ============
+  models: {
+    providers: {
+      // LOCAL: Ollama (FREE, instant)
+      ollama: {
+        apiKey: "ollama-local",
+        baseUrl: "http://127.0.0.1:11434",
+        api: "ollama",
+        models: [
+          {
+            id: "llama3.3:13b",
+            name: "Llama 3.3 13B",
+            reasoning: false,
+            input: ["text"],
+            cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+            contextWindow: 8192,
+            maxTokens: 81920,
+            tags: ["local", "free", "general", "chat"],
+            description: "Main workhorse - general tasks, instant response"
+          },
+          {
+            id: "deepseek-r1:8b",
+            name: "DeepSeek-R1 8B",
+            reasoning: true,
+            input: ["text"],
+            cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 },
+            contextWindow: 4096,
+            maxTokens: 40960,
+            tags: ["local", "free", "reasoning", "code"],
+            description: "Local reasoning model - complex problems, R1 chain-of-thought"
+          }
+        ]
+      },
+
+      // CLOUD: Together AI (CHEAP, ~$0.0001-0.001 per 1M tokens)
+      together: {
+        apiKey: "${TOGETHER_API_KEY}",
+        baseUrl: "https://api.together.xyz/v1",
+        api: "openai-completions",
+        models: [
+          {
+            id: "deepseek-ai/DeepSeek-V3",
+            name: "DeepSeek-V3 (Cloud)",
+            reasoning: true,
+            input: ["text"],
+            cost: { input: 0.00014, output: 0.00014 },
+            contextWindow: 65536,
+            maxTokens: 655360,
+            tags: ["cloud", "cheap", "reasoning", "code"],
+            description: "Advanced reasoning + coding, cheaper than Anthropic"
+          },
+          {
+            id: "meta-llama/Llama-3.3-70B-Instruct-Turbo",
+            name: "Llama 3.3 70B Turbo (Cloud)",
+            reasoning: false,
+            input: ["text"],
+            cost: { input: 0.00088, output: 0.00088 },
+            contextWindow: 8192,
+            maxTokens: 81920,
+            tags: ["cloud", "cheap", "general", "fast"],
+            description: "Fast cloud fallback when local is slow"
+          }
+        ]
+      },
+
+      // PREMIUM: Anthropic Claude (CODE + CHAT quality)
+      anthropic: {
+        apiKey: "${ANTHROPIC_API_KEY}",
+        models: [
+          {
+            id: "claude-haiku-4-5-20251001",
+            name: "Claude Haiku",
+            reasoning: false,
+            input: ["text", "image"],
+            cost: { input: 0.0008, output: 0.004 },
+            contextWindow: 200000,
+            maxTokens: 4096,
+            tags: ["premium", "code", "chat", "vision"],
+            description: "General chat + code - fast & good quality"
+          },
+          {
+            id: "claude-sonnet-4-5-20250514",
+            name: "Claude Sonnet 4.5",
+            reasoning: false,
+            input: ["text", "image"],
+            cost: { input: 0.003, output: 0.015 },
+            contextWindow: 200000,
+            maxTokens: 4096,
+            tags: ["premium", "code", "complex", "vision"],
+            description: "Complex code/reasoning - highest quality"
+          }
+        ]
+      },
+
+      // PREMIUM: Google Gemini (VISION + REASONING)
+      gemini: {
+        apiKey: "${GOOGLE_API_KEY}",
+        models: [
+          {
+            id: "gemini-2.0-flash-lite",
+            name: "Gemini Flash",
+            reasoning: false,
+            input: ["text", "image", "video"],
+            cost: { input: 0.0003, output: 0.0006 },
+            contextWindow: 100000,
+            maxTokens: 8000,
+            tags: ["premium", "vision", "chat", "multimodal"],
+            description: "Vision + chat - good for image analysis"
+          },
+          {
+            id: "gemini-2.0-pro-exp",
+            name: "Gemini Pro",
+            reasoning: true,
+            input: ["text", "image"],
+            cost: { input: 0.0075, output: 0.003 },
+            contextWindow: 32000,
+            maxTokens: 16000,
+            tags: ["premium", "reasoning", "complex"],
+            description: "Advanced reasoning with extended thinking"
+          }
+        ]
+      },
+
+      // FALLBACK: OpenAI GPT-4o (LAST RESORT)
+      openai: {
+        apiKey: "${OPENAI_API_KEY}",
+        models: [
+          {
+            id: "gpt-4o-mini",
+            name: "GPT-4o Mini",
+            reasoning: false,
+            input: ["text", "image"],
+            cost: { input: 0.00015, output: 0.0006 },
+            contextWindow: 128000,
+            maxTokens: 4096,
+            tags: ["premium", "fallback"],
+            description: "Fallback if everything else fails"
+          },
+          {
+            id: "gpt-4o",
+            name: "GPT-4o",
+            reasoning: false,
+            input: ["text", "image"],
+            cost: { input: 0.005, output: 0.015 },
+            contextWindow: 128000,
+            maxTokens: 4096,
+            tags: ["premium", "expensive"],
+            description: "Most expensive - only use as last resort"
+          }
+        ]
+      }
+    }
+  },
+
+  // ============ AGENT CONFIGURATION ============
+  agents: {
+    defaults: {
+      // PRIMARY: Ollama Llama (free, fast, local)
+      model: {
+        primary: "ollama/llama3.3:13b",
+        fallbacks: [
+          "ollama/deepseek-r1:8b",
+          "together/deepseek-ai/DeepSeek-V3",
+          "anthropic/claude-haiku-4-5-20251001",
+          "openai/gpt-4o-mini"
+        ]
+      },
+
+      // Available models for /model switching
+      models: {
+        // LOCAL (free)
+        "ollama/llama3.3:13b": { alias: "🦙 Llama 13B (LOCAL, Free)" },
+        "ollama/deepseek-r1:8b": { alias: "🧠 DeepSeek-R1 (LOCAL, Free)" },
+
+        // CLOUD (cheap)
+        "together/deepseek-ai/DeepSeek-V3": { alias: "💡 DeepSeek V3 (Cloud, $cheap)" },
+        "together/meta-llama/Llama-3.3-70B-Instruct-Turbo": { alias: "⚡ Llama 70B Turbo (Cloud, $cheap)" },
+
+        // PREMIUM
+        "anthropic/claude-haiku-4-5-20251001": { alias: "🎭 Claude Haiku (Premium, Good)" },
+        "anthropic/claude-sonnet-4-5-20250514": { alias: "🎪 Claude Sonnet (Premium, Best)" },
+        "gemini/gemini-2.0-flash-lite": { alias: "✨ Gemini Flash (Vision)" },
+        "gemini/gemini-2.0-pro-exp": { alias: "🌟 Gemini Pro (Reasoning)" },
+
+        // FALLBACK
+        "openai/gpt-4o-mini": { alias: "🔴 GPT-4o Mini (Fallback)" },
+        "openai/gpt-4o": { alias: "🔴 GPT-4o (Expensive)" }
+      },
+
+      workspace: "/Users/mac/.openclaw/workspace"
+    }
+  },
+
+  // ============ ENVIRONMENT VARIABLES ============
+  env: {
+    // Set these in ~/.zshrc or ~/.openclaw/.env
+    vars: {
+      OLLAMA_API_KEY: "ollama-local",
+      TOGETHER_API_KEY: "${TOGETHER_API_KEY}",
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY}",
+      GOOGLE_API_KEY: "${GOOGLE_API_KEY}",
+      OPENAI_API_KEY: "${OPENAI_API_KEY}"
+    }
+  }
+}
