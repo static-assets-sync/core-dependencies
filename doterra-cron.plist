@@ -8,7 +8,7 @@
     <key>ProgramArguments</key>
     <array>
         <string>/usr/local/bin/node</string>
-        <string>/Users/mac/.openclaw/workspace/doterra-scraper.js</string>
+        <string>/Users/mac/.openclaw/workspace/doterra-headless-bot.js</string>
     </array>
     
     <key>StartCalendarInterval</key>
