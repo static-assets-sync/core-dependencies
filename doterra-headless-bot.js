@@ -19,41 +19,57 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
+async function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function loginAndGetSession(browser) {
   console.log('[doTERRA] Opening login page...');
   const page = await browser.newPage();
   
-  await page.goto('https://login.doterra.com', { waitUntil: 'networkidle2' });
+  await page.goto('https://login.doterra.com', { waitUntil: 'networkidle2', timeout: 30000 });
   
   // Try multiple selector strategies
   console.log('[doTERRA] Attempting login...');
   try {
-    // Wait for any input
-    await page.waitForSelector('input', { timeout: 5000 });
+    // Wait for inputs
+    await page.waitForSelector('input', { timeout: 10000 });
     const inputs = await page.$$('input');
     
+    console.log('[doTERRA] Found ' + inputs.length + ' input fields');
+    
     if (inputs.length >= 2) {
-      // Fill ID
-      await inputs[0].type(CREDENTIALS.id, { delay: 50 });
-      await page.waitForTimeout(300);
+      // Fill ID (first input)
+      await inputs[0].click();
+      await delay(200);
+      await inputs[0].type(CREDENTIALS.id, { delay: 30 });
+      await delay(300);
       
-      // Fill password
-      await inputs[1].type(CREDENTIALS.password, { delay: 50 });
-      await page.waitForTimeout(300);
+      // Fill password (second input)
+      await inputs[1].click();
+      await delay(200);
+      await inputs[1].type(CREDENTIALS.password, { delay: 30 });
+      await delay(300);
       
-      // Submit
+      // Find and click submit button
       const buttons = await page.$$('button');
+      console.log('[doTERRA] Found ' + buttons.length + ' buttons');
+      
       if (buttons.length > 0) {
+        // Try to click the first button (usually submit)
         await buttons[0].click();
-        await page.waitForTimeout(3000);
+        console.log('[doTERRA] Clicked submit button');
+        await delay(4000);
       }
+    } else {
+      console.log('[doTERRA] Not enough input fields found');
     }
   } catch (error) {
-    console.log('[doTERRA] Login form navigation: ' + error.message);
+    console.log('[doTERRA] Login error: ' + error.message);
   }
   
   // Wait for dashboard to load
-  await page.waitForTimeout(3000);
+  await delay(3000);
   
   // Extract all cookies
   const cookies = await page.cookies();
@@ -78,6 +94,7 @@ async function scrapeIntelligence(page) {
   
   try {
     // Get page content
+    await delay(2000);
     const pageText = await page.evaluate(() => document.body.innerText);
     const pageHtml = await page.evaluate(() => document.body.innerHTML);
     
@@ -182,10 +199,16 @@ async function runHeadlessBot() {
     let page;
     if (fs.existsSync(SESSION_FILE)) {
       console.log('[doTERRA] Restoring existing session...');
-      const cookies = JSON.parse(fs.readFileSync(SESSION_FILE, 'utf8'));
-      page = await browser.newPage();
-      await page.setCookie(...cookies);
-      await page.goto('https://login.doterra.com/dashboard', { waitUntil: 'networkidle2', timeout: 10000 });
+      try {
+        const cookies = JSON.parse(fs.readFileSync(SESSION_FILE, 'utf8'));
+        page = await browser.newPage();
+        await page.setCookie(...cookies);
+        await page.goto('https://login.doterra.com/dashboard', { waitUntil: 'networkidle2', timeout: 15000 });
+      } catch (error) {
+        console.log('[doTERRA] Session restoration failed, creating new: ' + error.message);
+        const result = await loginAndGetSession(browser);
+        page = result.page;
+      }
     } else {
       console.log('[doTERRA] Creating new session...');
       const result = await loginAndGetSession(browser);
