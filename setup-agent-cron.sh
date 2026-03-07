@@ -20,7 +20,7 @@ cat > ~/Library/LaunchAgents/com.doterra.agent.plist << 'EOF'
     <key>ProgramArguments</key>
     <array>
         <string>/usr/local/bin/node</string>
-        <string>/Users/mac/.openclaw/workspace/doterra-agent.js</string>
+        <string>/Users/mac/.openclaw/workspace/doterra-full-automation.js</string>
     </array>
     
     <key>StartCalendarInterval</key>
