@@ -1,0 +1,243 @@
+{
+  "pageText": "back\nchangeMarket\nsignIn\nenrollToday\nPrivacy Policy\nTerms of Use\nUS - en\ndōTERRA International © 2026",
+  "allDivs": 27,
+  "allTables": 0,
+  "allSpans": 5,
+  "divsWithNumbers": [
+    {
+      "text": "back\nchangeMarket\nsignIn\nenrollToday\nPrivacy Policy\nTerms of Use\nUS - en\ndōTERRA International © 202",
+      "classes": "",
+      "id": "root"
+    },
+    {
+      "text": "US - en\ndōTERRA International © 2026",
+      "classes": "FooterBottom",
+      "id": ""
+    },
+    {
+      "text": "dōTERRA International © 2026",
+      "classes": "copyright",
+      "id": ""
+    },
+    {
+      "text": "dōTERRA International © 2026",
+      "classes": "FooterCopyright",
+      "id": ""
+    },
+    {
+      "text": "dōTERRA International © 2026",
+      "classes": "copyright-container",
+      "id": ""
+    }
+  ],
+  "memberElements": [
+    {
+      "tag": "HTML",
+      "text": "back\nchangeMarket\nsignIn\nenrollToday\nPrivacy Policy\nTerms of Use\nUS - en\ndōTERRA International © 202",
+      "classes": "wf-raleway-n2-active wf-raleway-n4-active wf-raleway-n1-active wf-raleway-n8-active wf-raleway-n7-active wf-raleway-n3-active wf-raleway-n6-active wf-sansserif-n4-inactive wf-active",
+      "id": ""
+    },
+    {
+      "tag": "BODY",
+      "text": "back\nchangeMarket\nsignIn\nenrollToday\nPrivacy Policy\nTerms of Use\nUS - en\ndōTERRA International © 202",
+      "classes": "",
+      "id": ""
+    },
+    {
+      "tag": "DIV",
+      "text": "back\nchangeMarket\nsignIn\nenrollToday\nPrivacy Policy\nTerms of Use\nUS - en\ndōTERRA International © 202",
+      "classes": "",
+      "id": "root"
+    },
+    {
+      "tag": "MAIN",
+      "text": "back\nchangeMarket\nsignIn\nenrollToday",
+      "classes": "mt-[100px] mb-[45px] max-[576px]:mt-20 max-[376px]:mb-[35px]",
+      "id": ""
+    },
+    {
+      "tag": "DIV",
+      "text": "back\nchangeMarket\nsignIn\nenrollToday",
+      "classes": "",
+      "id": ""
+    },
+    {
+      "tag": "DIV",
+      "text": "signIn\nenrollToday",
+      "classes": "SignIn",
+      "id": ""
+    },
+    {
+      "tag": "DIV",
+      "text": "signIn\nenrollToday",
+      "classes": "body",
+      "id": ""
+    },
+    {
+      "tag": "DIV",
+      "text": "enrollToday",
+      "classes": "",
+      "id": ""
+    },
+    {
+      "tag": "A",
+      "text": "enrollToday",
+      "classes": "",
+      "id": ""
+    },
+    {
+      "tag": "DIV",
+      "text": "enrollToday",
+      "classes": "Button",
+      "id": ""
+    },
+    {
+      "tag": "BUTTON",
+      "text": "enrollToday",
+      "classes": "ghost",
+      "id": ""
+    }
+  ],
+  "mainStructure": [
+    {
+      "tag": "DIV",
+      "id": "__gigyaScreenSet_ApiCallFix-RegistrationLogin",
+      "className": "",
+      "childCount": 0,
+      "textLength": 0
+    },
+    {
+      "tag": "DIV",
+      "id": "root",
+      "className": "",
+      "childCount": 4,
+      "textLength": 101
+    },
+    {
+      "tag": "DIV",
+      "id": "consent_blackbar",
+      "className": "",
+      "childCount": 0,
+      "textLength": 0
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "signInBannerImage",
+      "childCount": 3,
+      "textLength": 17
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "BannerImage",
+      "childCount": 1,
+      "textLength": 0
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "banner-image",
+      "childCount": 0,
+      "textLength": 0
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "backButton signInBackButton",
+      "childCount": 1,
+      "textLength": 4
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "BackButton",
+      "childCount": 1,
+      "textLength": 4
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "top-region-selector",
+      "childCount": 1,
+      "textLength": 12
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "RegLangSelector",
+      "childCount": 1,
+      "textLength": 12
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "SignIn",
+      "childCount": 1,
+      "textLength": 18
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "body",
+      "childCount": 2,
+      "textLength": 18
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "title",
+      "childCount": 0,
+      "textLength": 6
+    },
+    {
+      "tag": "DIV",
+      "id": "loginContainer",
+      "className": "",
+      "childCount": 0,
+      "textLength": 0
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "Button",
+      "childCount": 1,
+      "textLength": 11
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "FooterLinks",
+      "childCount": 1,
+      "textLength": 27
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "links",
+      "childCount": 2,
+      "textLength": 27
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "FooterBottom",
+      "childCount": 2,
+      "textLength": 36
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "reg-lang-selector",
+      "childCount": 1,
+      "textLength": 7
+    },
+    {
+      "tag": "DIV",
+      "id": "",
+      "className": "FooterRegLangSelector",
+      "childCount": 1,
+      "textLength": 7
+    }
+  ]
+}

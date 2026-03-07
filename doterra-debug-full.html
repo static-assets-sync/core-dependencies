@@ -1,0 +1,250 @@
+<!DOCTYPE html><html lang="en" class="wf-raleway-n2-active wf-raleway-n4-active wf-raleway-n1-active wf-raleway-n8-active wf-raleway-n7-active wf-raleway-n3-active wf-raleway-n6-active wf-sansserif-n4-inactive wf-active"><head><script type="text/javascript" async="" src="https://edge.fullstory.com/datalayer/v4/latest.js"></script><script async="" crossorigin="anonymous" src="https://edge.fullstory.com/s/fs.js"></script><script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/destination?id=AW-956873153&amp;cx=c&amp;gtm=4e6341"></script><script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=G-XW71K6YFHT&amp;cx=c&amp;gtm=4e6341"></script><script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=G-KR6KEW2NZ9&amp;cx=c&amp;gtm=4e6341"></script><script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-PHX657"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <!--<link rel="manifest" href="/manifest.json">-->
+    <link rel="shortcut icon" href="/doterra-favicon.ico">
+    <title>Login Page | dōTERRA Essential Oils</title>
+    <link rel="stylesheet" href="/script/vendor-ui.9c764ea29c4af57b9465.css"><link rel="stylesheet" href="/script/common.b108e2fbd02883ca4632.css">
+    <link rel="stylesheet" href="/static-loading.css">
+
+    <script data-name="gigya" type="text/javascript" src="https://sdk.login.doterra.com/js/gigya.js?apikey=3_IeTHYO5iQqBz2VEw0sOh3dqMQj2cR1DamqynMcICUyquuiM8-63c7onnMkZyja7c"></script>
+    <script data-name="Fullstory Wrapper" type="application/javascript">
+      //This is your domain, as in, how you who are calling the API wish to be identified.
+      var MY_DOMAIN = "doterra-cm1.com";
+      var REQUIRE_USER_EXPRESSED_PERMISSION = true;
+      var _STATE = {};
+      /**
+       * Different pages add the Consent Manager in different locations, so all callers of the API must wait till
+       * the API is loaded. The API is loaded in two prfs:
+       * 1) The first prf is where the "PrivacyManagerAPI" object exists on the page and where default and
+       * page/domain specific settings can be obtained. If your requirements demand user consent, you must wait
+       * for the second prf load, but it is always recommended to wait for the second prf no matter what.
+       * The "loading" parameter will be added to all API responses when the API is in this state.
+       * 2) The second prf loads the user preferences and the domain specific information. If you made a
+       * postMessage API call during the first prf, then the API will automatically send you another, updated,
+       * response if the result has changed.
+       */
+      function runOnce() {
+        // If notice behaviour is 'none' activate all 'trustcm' scripts
+        window.addEventListener("DOMContentLoaded", function(e){
+          try{
+            if(!_STATE.hasRunOnce){
+              var isNone = /.*(,|)none/i.test(getBehavior());
+              console.log("isNone=" + isNone);
+              if (isNone) {
+                if( !_STATE.hasLoadedRequired ){
+                  activateElement(document.querySelectorAll(".trustecm[trackertype=required]"));
+                  activateElement(document.querySelectorAll(".trustecm[trackertype=functional]"));
+                  activateElement(document.querySelectorAll(".trustecm[trackertype=advertising]"));
+                  activateElement(document.querySelectorAll(".trustecm[trackertype=any]"));
+                  _STATE.hasLoadedRequired = true;
+                  _STATE.hasRunOnce = true;
+                  _STATE.i && clearInterval(_STATE.i);
+                }
+              }
+            }
+          }catch(e){
+            e.name != 'SyntaxError' && console.log(e);
+          }
+        }, false);
+
+        //CHECK: for API exists on the page
+        if (!_STATE.hasRunOnce && window.PrivacyManagerAPI) {
+          console.log("doing run once");
+          //Register with the API for automatic updates of user preferences (for the settings you care about)
+          //--OR-- if the API is loading, then this will send an update when the API is done and has loaded the user preferences.
+          window.addEventListener("message", function(e) {
+            try {
+              var json = JSON.parse(e.data);
+              json.PrivacyManagerAPI && handleAPIResponse(json.PrivacyManagerAPI);
+            } catch (e) {
+              e.name != 'SyntaxError' && console.log(e);
+            }
+          }, false);
+          var apiObject = {
+            PrivacyManagerAPI: {
+              self: MY_DOMAIN,
+              action: "getConsent",
+              timestamp: new Date().getTime(),
+              type: "functional"
+            }
+          };
+          window.top.postMessage(JSON.stringify(apiObject), "*");
+          apiObject = {
+            PrivacyManagerAPI: {
+              self: MY_DOMAIN,
+              action: "getConsent",
+              timestamp: new Date().getTime(),
+              type: "advertising"
+            }
+          };
+          window.top.postMessage(JSON.stringify(apiObject), "*");
+          _STATE.hasRunOnce = true;
+          _STATE.i && clearInterval(_STATE.i);
+        }
+      }
+      /**
+       * This function returns value of notice_behavior cookie to determine location and behavior manager based on domain.
+       * When no notice_behavior cookie exists, this returns a blank string.
+       */
+      function getBehavior() {
+        var result = "";
+        var rx = new RegExp("\s*notice_behavior\s*=\s*([^;]*)").exec(document.cookie);
+        if (rx && rx.length > 1) {
+          result = rx[1];
+        }
+        return result;
+      }
+      /**
+       * This function is called whenever a user preference is initially set, is retrieved for the first time on this page, or is updated.
+       * This is the gateway function which should be customized by each client (you) to determine when and how to handle the API response.
+       *
+       * The second half of the function determines settings from the CM API, and decides which elements on the page should be "activated" based upon those settings.
+       * Elements can only be activated once. Elements can not be deactivated, once activated.
+       */
+      function handleAPIResponse(response) {
+        //CHECK: make sure this response is to YOU. You will actually get the messages to all API callers on this page, not just to you.
+        if (!response.source || response.self != MY_DOMAIN) return;
+        console.log("user decision", response);
+        //Required trackers/cookies are always allowed, no need to ask permission.
+        if (!_STATE.hasLoadedRequired) {
+          activateElement(document.querySelectorAll(".trustecm[trackertype=required]"));
+          _STATE.hasLoadedRequired = true;
+        }
+        // Check if behavior manager is EU
+        var isEU = /.*(,|)eu/i.test(getBehavior());
+        //Case where we don't want to do anything till the user has made a preference.
+        if (isEU && REQUIRE_USER_EXPRESSED_PERMISSION && response.source != "asserted") return;
+        //Step 1) Get Consent Manager settings (user prefs)
+        // These API calls are DIFFERENT than the original API call ("response" parameter) so they must be called separately.
+        //Step 2) Apply the settings after checking if approved
+        // Check if behavior is none
+        // var isNone = /.*(,|)none/i.test(getBehavior());
+        // console.log("isNone=" + isNone);
+        // if (isNone) { // loadAll
+        // activateElement(document.querySelectorAll(".trustecm[trackertype=advertising]"));
+        // _STATE.hasLoadedAdvertising = true;
+        // }
+        var setting = null;
+        if (!_STATE.hasLoadedAdvertising) {
+          setting = PrivacyManagerAPI.callApi("getConsent", MY_DOMAIN, null, null, "advertising");
+          if (setting.consent == "approved") {
+            activateElement(document.querySelectorAll(".trustecm[trackertype=advertising]"));
+            _STATE.hasLoadedAdvertising = true;
+          }
+          console.log(setting);
+        }
+        if (!_STATE.hasLoadedFunctional) {
+          setting = PrivacyManagerAPI.callApi("getConsent", MY_DOMAIN, null, null, "functional");
+          if (setting.consent == "approved") {
+            activateElement(document.querySelectorAll(".trustecm[trackertype=functional]"));
+            _STATE.hasLoadedFunctional = true;
+          }
+          console.log(setting);
+        }
+        // No additional checking, this always fires, but only after a user has consented
+        if (!_STATE.hasLoadedAnyConsent) {
+          activateElement(document.querySelectorAll(".trustecm[trackertype=any]"));
+          _STATE.hasLoadedAnyConsent = true;
+        }
+        //check of vendor domain and fires if that domain is approved, which is based on how that domain was categorized on the backend
+        var vendors = document.querySelectorAll(".trustecm[trackertype=vendor]");
+        for (var i = 0; i < vendors.length; i++) {
+          var currentVendor = vendors[i];
+          var vDomain = currentVendor.getAttribute("vsrc");
+          if (vDomain && !_STATE['hasLoaded' + vDomain]) {
+            setting = PrivacyManagerAPI.callApi("getConsent", MY_DOMAIN, vDomain);
+            if (setting.consent === "approved") {
+              activateElement(document.querySelectorAll(".trustecm[trackertype=vendor][vsrc='" + vDomain + "' ]"));
+              _STATE['hasLoaded' + vDomain] = true;
+            }
+            console.log(setting);
+          }
+        }
+      }
+      /**
+       * Activates (runs, loads, or displays) an element based upon element node name.
+       * @param {Array.<HTMLElement>} list
+       */
+      function activateElement(list) {
+        if (!(list instanceof Array || list instanceof NodeList)) throw "Illegal argument - must be an array";
+        console.log("activating", list);
+        for (var item, i = list.length; i-- > 0;) {
+          item = list[i];
+          item.class = "trustecm_done";
+          switch (item.nodeName.toLowerCase()) {
+            case "script":
+              var z = item.getAttribute("thesrc");
+              if (z) {
+                var y = document.createElement("script");
+                y.src = z;
+                y.async = item.async;
+                item.parentNode.insertBefore(y, item);
+              } else eval(item.text || item.textContent || item.innerText);
+          }
+        }
+      }
+      _STATE.i = setInterval(runOnce, 10);
+    </script>
+    <script data-name="Fullstory" type="text/plain" class="trustecm" trackertype="functional">
+      window['_fs_debug'] = false;
+      window['_fs_host'] = 'fullstory.com';
+      window['_fs_org'] = '98984';
+      window['_fs_namespace'] = 'FS';
+      (function(m,n,e,t,l,o,g,y){
+          if (e in m) {if(m.console && m.console.log) { m.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].');} return;}
+          g=m[e]=function(a,b){g.q?g.q.push([a,b]):g._api(a,b);};g.q=[];
+          o=n.createElement(t);o.async=1;o.src='https://'+_fs_host+'/s/fs.js';
+          y=n.getElementsByTagName(t)[0];y.parentNode.insertBefore(o,y);
+          g.identify=function(i,v){g(l,{uid:i});if(v)g(l,v)};
+          g.setUserVars=function(v){g(l,v)};
+          g.event=function(i,v){g('event',{n:i,p:v})};
+          g.shutdown=function(){g("rec",!1)};g.restart=function(){g("rec",!0)};
+          g.consent=function(a){g("consent",!arguments.length||a)};
+          g.identifyAccount=function(i,v){o='account';v=v||{};v.acctId=i;g(o,v)};
+          g.clearUserCookie=function(c,d,i){
+                 if(!c || document.cookie.match(('fs_uid=[`;`]*`[`;`]*`[`;`]*`')))){
+                          d=n.domain;while(1){ n.cookie='fs_uid=;domain='+d+';path=/;expires='+new Date(0).toUTCString();i=d.indexOf('.');if(i<0)break;d=d.slice(i+1)}
+              }
+            };
+          })(window,document,window['_fs_namespace'],'script','user');
+    </script>
+    <script data-name="GTM">
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-PHX657');
+    </script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,200,300,400,600,700,800%7Csans-serif" media="all">
+
+
+  <script async="" src="https://login.doterra.com/ve-stand-will-looke-time-heare-when-looke-not-st?cachebuster=1772922918861"></script><script type="text/javascript" async="" src="https://googleads.g.doubleclick.net/pagead/viewthroughconversion/956873153/?random=1772922919477&amp;cv=11&amp;fst=1772922919477&amp;bg=ffffff&amp;guid=ON&amp;async=1&amp;gtm=45be6341v9193598179z871674160za20gzb71674160zd71674160xea&amp;gcd=13l3l3l3l1l1&amp;dma=0&amp;tag_exp=103116026~103200004~115616986~115938466~115938469~116024733~117477894~117484252&amp;u_w=1920&amp;u_h=1080&amp;url=https%3A%2F%2Flogin.doterra.com%2Fsign-in%3Fgig_client_id%3DBhJDeNVWPPH1UqTCQn9y5EJo&amp;ref=https%3A%2F%2Flogin.doterra.com%2Fop-proxy%3Fcontext%3DeyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik1FSkdRVFUyUVVVd1FVWTVNamN6TWtWRE5rVkJPREpCUXpnMU1UWkVPVVpGTkRnNVJrUXdRUSIsImN0eF9tb2RlIjoibG9naW4ifQ.eyJpc3MiOiJodHRwczovL3Nkay5sb2dpbi5kb3RlcnJhLmNvbS9vaWRjL29wL3YxLjAvM19JZVRIWU81aVFxQnoyVkV3MHNPaDNkcU1RajJjUjFEYW1xeW5NY0lDVXlxdXVpTTgtNjNjN29ubk1rWnlqYTdjLyIsImN0eF9kYyI6InVzMSIsImlhdCI6MTc3MjkyMjkxNSwiZXhwIjoxNzcyOTIzNTE1LCJjbGllbnRfaWQiOiJCaEpEZU5WV1BQSDFVcVRDUW45eTVFSm8iLCJjdHhfaWQiOiIzYTBhYzgwYTQxMmY0M2IxOGM2NjNlZmJlNDJjNTBjYiIsInJlZGlyZWN0X3VybCI6Imh0dHBzOi8vb2ZmaWNlLmRvdGVycmEuY29tL2NhbGxiYWNrIn0.YiNDeB5y3olbR6979Gi5tlKBdeF5i_ZtBkQwVuvsaC89l3ynUVvDj9ae4kNXW0w6LJ03uKtDWMMCWBfm0tTFg2YnZICqH6qqzoE85T-SaYIQBl0ffuqC5BKbLm8Lq21UlyntuqjBCCaA8LgtnEZDL4HCD2AobBxhyPZYJN0E-gp3jGYMqBnSz6tV3MPqqxy08tzQQ_QR-pBlg3UsqI1UIizoUB1m1wsl6PqOmkbNY8AQXtOabGNH-pH4xtmzRrPFu2DmOHFEqORDjRqbe_8aTaNZeSeBPlc_5tFXFAbqowtsT1zdQZb4KHQCV6LugLPnVstjE0MVc1JBdx8thdiSzg%26client_id%3DBhJDeNVWPPH1UqTCQn9y5EJo%26mode%3Dlogin%26scope%3Dopenid%2Bemail%2Bprofile%26gig_skipConsent%3Dtrue&amp;frm=0&amp;tiba=Login%20Page%20%7C%20d%C5%8DTERRA%20Essential%20Oils&amp;did=dNTIxZG&amp;gdid=dNTIxZG&amp;hn=www.googleadservices.com&amp;npa=0&amp;pscdl=noapi&amp;auid=2016837466.1772922915&amp;uaa=arm&amp;uab=64&amp;uafvl=Not-A.Brand%3B24.0.0.0%7CChromium%3B146.0.7680.31&amp;uamb=0&amp;uam=&amp;uap=macOS&amp;uapv=26.3.0&amp;uaw=0&amp;_tu=CA&amp;data=ads_data_redaction%3Dfalse&amp;rfmt=3&amp;fmt=4"></script><script async="true" type="text/javascript" src="https://cdn.attn.tv/tag/4-latest/unified-tag.js?v=4-latest_ec15ef8b2c"></script><script type="text/javascript" src="https://cdn.attn.tv/growth-tag-assets/client-configs/mbM.js" async="true"></script><script async="" src="https://rs.fullstory.com/rec/integrations?OrgId=98984&amp;isInFrame=false&amp;isNative=false"></script></head>
+  <body><div id="__gigyaScreenSet_ApiCallFix-RegistrationLogin" style="display: none;"></div>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PHX657" height="0" width="0"></iframe>
+    </noscript>
+    <div id="root" data-model="{&quot;defaultRedirect&quot;:&quot;https://www.doterra.com&quot;,&quot;envName&quot;:&quot;prod&quot;,&quot;errorMessage&quot;:null,&quot;gigyaApiKey&quot;:&quot;3_IeTHYO5iQqBz2VEw0sOh3dqMQj2cR1DamqynMcICUyquuiM8-63c7onnMkZyja7c&quot;,&quot;gigyaRpClientId&quot;:&quot;RzFgRmPlegftl8RXu2awVaGy&quot;,&quot;hybrisSupportedMarkets&quot;:&quot;us,ca&quot;,&quot;language&quot;:{&quot;active&quot;:true,&quot;code&quot;:&quot;en-US&quot;,&quot;dtxLanguage&quot;:null,&quot;gigyaCode&quot;:&quot;en&quot;,&quot;id&quot;:3,&quot;langCode&quot;:&quot;en&quot;,&quot;nameKey&quot;:&quot;English&quot;,&quot;privacyPolicyLink&quot;:&quot;https://www.doterra.com/US/en/privacy-notice&quot;,&quot;termsOfUseLink&quot;:&quot;https://www.doterra.com/US/en/wellness-advocate-terms-and-conditions&quot;},&quot;mode&quot;:null,&quot;region&quot;:{&quot;active&quot;:true,&quot;code&quot;:&quot;US&quot;,&quot;defaultLanguage&quot;:{&quot;active&quot;:true,&quot;code&quot;:&quot;en-US&quot;,&quot;dtxLanguage&quot;:null,&quot;gigyaCode&quot;:&quot;en&quot;,&quot;id&quot;:3,&quot;langCode&quot;:&quot;en&quot;,&quot;nameKey&quot;:&quot;English&quot;,&quot;privacyPolicyLink&quot;:&quot;https://www.doterra.com/US/en/privacy-notice&quot;,&quot;termsOfUseLink&quot;:&quot;https://www.doterra.com/US/en/wellness-advocate-terms-and-conditions&quot;},&quot;dtxCountry&quot;:&quot;USA&quot;,&quot;enrollUrl&quot;:&quot;https://www.doterra.com/US/en/selectRegion/WC&quot;,&quot;id&quot;:1,&quot;languages&quot;:[{&quot;active&quot;:true,&quot;code&quot;:&quot;zh-US&quot;,&quot;dtxLanguage&quot;:null,&quot;gigyaCode&quot;:&quot;zh-cn&quot;,&quot;id&quot;:1,&quot;langCode&quot;:&quot;zh&quot;,&quot;nameKey&quot;:&quot;中文&quot;,&quot;privacyPolicyLink&quot;:&quot;https://www.doterra.com/US/zh/privacy-notice&quot;,&quot;termsOfUseLink&quot;:&quot;https://www.doterra.com/US/zh/wellness-advocate-terms-and-conditions&quot;},{&quot;active&quot;:true,&quot;code&quot;:&quot;en-US&quot;,&quot;dtxLanguage&quot;:null,&quot;gigyaCode&quot;:&quot;en&quot;,&quot;id&quot;:3,&quot;langCode&quot;:&quot;en&quot;,&quot;nameKey&quot;:&quot;English&quot;,&quot;privacyPolicyLink&quot;:&quot;https://www.doterra.com/US/en/privacy-notice&quot;,&quot;termsOfUseLink&quot;:&quot;https://www.doterra.com/US/en/wellness-advocate-terms-and-conditions&quot;},{&quot;active&quot;:true,&quot;code&quot;:&quot;es-US&quot;,&quot;dtxLanguage&quot;:null,&quot;gigyaCode&quot;:&quot;es&quot;,&quot;id&quot;:2,&quot;langCode&quot;:&quot;es&quot;,&quot;nameKey&quot;:&quot;Español&quot;,&quot;privacyPolicyLink&quot;:&quot;https://www.doterra.com/US/es/privacy-notice&quot;,&quot;termsOfUseLink&quot;:&quot;https://www.doterra.com/US/es/wellness-advocate-terms-and-conditions&quot;}],&quot;locations&quot;:[],&quot;nameKey&quot;:&quot;unitedStates&quot;,&quot;viewOrder&quot;:0},&quot;resetNeeded&quot;:false,&quot;sdkHost&quot;:&quot;sdk.login.doterra.com&quot;,&quot;urlBase&quot;:&quot;https://login.doterra.com&quot;,&quot;zones&quot;:null}"><div id="consent_blackbar"></div><header class="Header"><img alt="logo" class="logo" src="https://login.doterra.com/script/f55ea8a75ae9d5ed033f.svg"><img alt="logo-mobile" class="logo-mobile" src="https://login.doterra.com/script/d115f5fd25c873778ce6.svg"></header><main class="mt-[100px] mb-[45px] max-[576px]:mt-20 max-[376px]:mb-[35px]"><div><div class="signInBannerImage"><div class="BannerImage"><div class="banner-image"></div></div><div class="backButton signInBackButton"><div class="BackButton"><a href="https://www.doterra.com" target="_self" style="display: flex; align-items: center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512" style="width: 1em; height: 1em; fill: currentcolor;"><path d="M192 448c-8.188 0-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L77.25 256l137.4 137.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448z"></path></svg><span class="back-button-text" lang="en">back</span></a></div></div><div class="top-region-selector"><div class="RegLangSelector"><a href="/select-your-region?lang=en-US" data-discover="true" style="display: flex; align-items: center;"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="earth-americas" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 1em; height: 1em; fill: currentcolor;"><path fill="currentColor" d="M57.7 193l9.4 16.4c8.3 14.5 21.9 25.2 38 29.8L163 255.7c17.2 4.9 29 20.6 29 38.5l0 39.9c0 11 6.2 21 16 25.9s16 14.9 16 25.9l0 39c0 15.6 14.9 26.9 29.9 22.6c16.1-4.6 28.6-17.5 32.7-33.8l2.8-11.2c4.2-16.9 15.2-31.4 30.3-40l8.1-4.6c15-8.5 24.2-24.5 24.2-41.7l0-8.3c0-12.7-5.1-24.9-14.1-33.9l-3.9-3.9c-9-9-21.2-14.1-33.9-14.1L257 256c-11.1 0-22.1-2.9-31.8-8.4l-34.5-19.7c-4.3-2.5-7.6-6.5-9.2-11.2c-3.2-9.6 1.1-20 10.2-24.5l5.9-3c6.6-3.3 14.3-3.9 21.3-1.5l23.2 7.7c8.2 2.7 17.2-.4 21.9-7.5c4.7-7 4.2-16.3-1.2-22.8l-13.6-16.3c-10-12-9.9-29.5 .3-41.3l15.7-18.3c8.8-10.3 10.2-25 3.5-36.7l-2.4-4.2c-3.5-.2-6.9-.3-10.4-.3C163.1 48 84.4 108.9 57.7 193zM464 256c0-36.8-9.6-71.4-26.4-101.5L412 164.8c-15.7 6.3-23.8 23.8-18.5 39.8l16.9 50.7c3.5 10.4 12 18.3 22.6 20.9l29.1 7.3c1.2-9 1.8-18.2 1.8-27.5zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"></path></svg><span class="change-market-text" lang="en" style="margin-left: 5px;">changeMarket</span></a></div></div></div><div class="SignIn"><div class="body"><div class="title" lang="en">signIn</div><div style="display: flex; justify-content: center; align-items: center; flex-direction: column;"><div id="loginContainer"></div><a href="https://www.doterra.com/US/en/selectRegion/WC" style="width: 100%;"><div class="Button"><button type="button" class="ghost" lang="en">enrollToday</button></div></a></div></div></div></div></main><footer class="relative z-50 bg-white border-t-2 border-[#E8E8E8] text-sm"><div class="FooterLinks"><div class="links"><div lang="en"><a href="https://www.doterra.com/US/en/privacy-notice" target="_blank" rel="noopener noreferrer">Privacy Policy</a></div><div lang="en"><a href="https://www.doterra.com/US/en/wellness-advocate-terms-and-conditions" target="_blank" rel="noopener noreferrer">Terms of Use</a></div></div></div><div class="FooterBottom"><div class="reg-lang-selector"><div class="FooterRegLangSelector"><a href="/select-your-region?lang=en-US" data-discover="true"><span class="region">US</span> - <span class="region">en</span></a></div></div><div class="copyright"><div class="FooterCopyright"><div class="copyright-container"><img alt="doterra-o" class="doterra-o" src="https://login.doterra.com/script/d115f5fd25c873778ce6.svg"><span class="copyright-text">dōTERRA International © 2026</span></div></div></div></div></footer></div>
+    <script type="text/javascript" src="/script/runtime.ca055f15acc28734cbb9.js"></script><script type="text/javascript" src="/script/vendor-react.de99d3dcb066a2456930.js"></script><script type="text/javascript" src="/script/vendor-ui.852f47d2e5d981db533f.js"></script><script type="text/javascript" id="" charset="">var consentListeners=[];window.addConsentListenerTA=function(a){consentListeners.push(a)};var onConsentChange=function(a,b){consentListeners.forEach(function(c){c(a,b)})},__dispatched__={},__i__=self.postMessage&&setInterval(function(){if(self.PrivacyManagerAPI&&__i__){var a={PrivacyManagerAPI:{action:"getConsentDecision",timestamp:(new Date).getTime(),self:self.location.host}};self.top.postMessage(JSON.stringify(a),"*");__i__=clearInterval(__i__)}},50);
+self.addEventListener("message",function(a,b){try{if(a.data&&(b=JSON.parse(a.data))&&(b=b.PrivacyManagerAPI)&&b.capabilities&&b.action=="getConsentDecision"){console.log("On consent changed!");var c=window.truste.util.readCookie("notice_behavior")||truste.eu.bindMap.behavior+","+truste.eu.bindMap.behaviorManager,d=window.truste.util.readCookie("cmapi_cookie_privacy")||"";onConsentChange(d,c);self.dataLayer&&self.dataLayer.push({event:"Consent Changed"});console.log("After On consent changed!")}}catch(e){}});
+var _taInterval,_taAttempts=0,_taGoogleTagWasSetLate=function(){_taAttempts>50&&clearInterval(_taInterval);window.google_tag_data&&window.google_tag_data.ics&&window.google_tag_data.ics.wasSetLate&&(console.warn("WARNING: Tags are firing before consent is initialized. Please ensure that the consent mode default is initialized before firing tags."),clearInterval(_taInterval));_taAttempts++};_taInterval=setInterval(_taGoogleTagWasSetLate,200);</script><meta name="google-site-verification" content="FWxSCo1HsKU3sJrLyg10A-PyUgknOMab68bG5jiljNc"><meta name="google-site-verification" content="m-x1cfYYJ6z4UQU79ckSMjfdcNFI9YzfUE-mcdi4zN4">
+<script type="text/javascript" src="/script/vendor-common.510233d5b9f25ab28428.js"></script><iframe title="Api Service" aria-hidden="true" src="https://sdk.login.doterra.com/js/Api.htm?apiKey=3_IeTHYO5iQqBz2VEw0sOh3dqMQj2cR1DamqynMcICUyquuiM8-63c7onnMkZyja7c&amp;version=latest&amp;build=18585&amp;flavor=base&amp;serviceName=apiService#origin=https://login.doterra.com/sign-in?gig_client_id=BhJDeNVWPPH1UqTCQn9y5EJo&amp;gig_loggerConfig=%7B%22logLevel%22%3A0%2C%22clientMuteLevel%22%3A0%2C%22logTheme%22%3A1%7D" style="position: absolute; height: 0px; width: 0px; display: none;"></iframe><script type="text/javascript" src="/script/common.061c53b841e9a06c4c3d.js"></script><script type="text/javascript" src="/script/sign-in.bcf43d712e2c0f63a09f.js"></script>
+
+    <script type="text/javascript">
+      /*<![CDATA[*/
+      let envName = "prod";
+      // gigya conf
+      window.__gigyaConf = {
+        enableSSOToken: true
+      };
+      /*]]>*/
+    </script>
+  
+
+<meta name="p:domain_verify" content="5d66baa17632b4c2880a0ece5f1d34c9">
+<script type="text/javascript" id="" charset="">window._fs_debug=!1;window._fs_host="fullstory.com";window._fs_script="edge.fullstory.com/s/fs.js";window._fs_org="98984";window._fs_namespace="FS";
+(function(e,k,l,m,h,f,a,d){l in e?e.console&&e.console.log&&e.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].'):(a=e[l]=function(c,b,g){a.q?a.q.push([c,b,g]):a._api(c,b,g)},a.q=[],f=k.createElement(m),f.async=1,f.crossOrigin="anonymous",f.src="https://"+_fs_script,d=k.getElementsByTagName(m)[0],d.parentNode.insertBefore(f,d),a.identify=function(c,b,g){a(h,{uid:c},g);b&&a(h,b,g)},a.setUserVars=function(c,b){a(h,c,b)},a.event=function(c,b,g){a("event",{n:c,p:b},g)},a.anonymize=
+function(){a.identify(!1)},a.shutdown=function(){a("rec",!1)},a.restart=function(){a("rec",!0)},a.log=function(c,b){a("log",[c,b])},a.consent=function(c){a("consent",!arguments.length||c)},a.identifyAccount=function(c,b){f="account";b=b||{};b.acctId=c;a(f,b)},a.clearUserCookie=function(){},a.setVars=function(c,b){a("setVars",[c,b])},a._w={},d="XMLHttpRequest",a._w[d]=e[d],d="fetch",a._w[d]=e[d],e[d]&&(e[d]=function(){return a._w[d].apply(this,arguments)}),a._v="1.3.0")})(window,document,window._fs_namespace,
+"script","user");</script>
+<script id="" text="" charset="" type="text/javascript" src="https://cdn.attn.tv/doterra/dtag.js"></script></body></html>

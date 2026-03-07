@@ -77,23 +77,20 @@ async function sendTelegram(message) {
 // ==================== BROWSER OPERATIONS ====================
 async function initBrowser() {
   // Connect to existing Brave instance using debugging port
-  // If that fails, launch fresh
+  // This allows us to use the existing logged-in session
   try {
-    log('🔗 Attempting to connect to existing Brave...');
-    return await puppeteer.connect({
-      browserWSEndpoint: 'ws://127.0.0.1:9222'
+    log('🔗 Connecting to existing Brave session...');
+    const browser = await puppeteer.connect({
+      browserWSEndpoint: 'ws://127.0.0.1:9222',
+      defaultViewport: null
     });
+    log('✅ Connected to existing Brave');
+    return browser;
   } catch (e) {
-    log('⚠️  Could not connect to existing Brave, launching fresh...');
-    return await puppeteer.launch({
-      headless: CONFIG.headless,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--remote-debugging-port=9222'
-      ]
-    });
+    log('❌ Could not connect to existing Brave');
+    log('⚠️  IMPORTANT: You must open Brave and log into doTERRA first!');
+    log('⚠️  Then enable debugging: --remote-debugging-port=9222');
+    throw new Error('Brave not accessible. Open Brave with: /Applications/Brave\ Browser.app/Contents/MacOS/Brave\ Browser --remote-debugging-port=9222');
   }
 }
 
